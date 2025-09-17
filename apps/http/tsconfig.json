@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2020",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+
+    /* Transpiling with esbuild */
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true, //  // esbuild will handle the output, not tsc
+
+    /* Pathing */
+    "rootDir": "src",
+  
+    /* Libs */
+    "lib": ["es2020"]
+  },
+  "include": ["src"] // Only check files in the src directory
+
+}
