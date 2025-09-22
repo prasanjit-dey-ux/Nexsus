@@ -15,19 +15,157 @@ datasource db {
 }
 
 model User {
-  id            String @id @default(uuid())
-  email         String @unique
-  username      String @unique
-  password      String
-  displayName   String?
-  bio           String?
-  createdAt     DateTime @default(now())
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  password            String?
+  provider            AuthProvider @default(EMAIL)
+  providerId          String   
+  username            String   @unique
+  displayName         String?
+  profileImageUrl     String?
+  bannerImageUrl      String?
+  bio                 String?
+  role                Role     @default(User)
+  isProfileCompleted  Boolean  @default(false)
+  isPremium           Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  lastLoginAt         DateTime?
+  participants        Participant[]
+  sentMessages        Message[] @relation("SentMessage")
+  receivedMessages    Message[] @relation("ReceivedMessage")
+  notifications       Notification[]
+  avatars             Avatar[]
+  createdSpaces       Space[]  @relation("CreatedSpaces")
+
+  @@unique([provider,providerId])
+}
+
+model Participant {
+  id    String @id @default(uuid())
+  userId  String
+  spaceId String
+  role    String?
+  joinedAt  DateTime @default(now())
+  status    String?
+  positionX  Int?
+  positionY  Int?
+  avatarId   String?
+  user       User @relation(fields: [userId], references: [id])
+  space      Space @relation(fields: [spaceId], references: [id])
+  avatar     Avatar? @relation(fields: [avatarId], references: [id])
+
+  @@index([spaceId])
 }
 
 model Space {
   id            String @id @default(uuid())
+  name          String
+  description   String?
+  width         Int
+  height        Int
+  creator       User  @relation("CreatedSpaces",fields: [creatorId], references: [id])
+  creatorId     String
+  map           Map   @relation(fields: [mapId], references: [id])
+  mapId         String
+  isPrivate     Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  participants  Participant[]      
+  messages      Message[]
+  channels      Channel[]
+  
+  @@index([creatorId])
 }
 
 model Map {
-  id       String @id @default(cuid())
+  id                String @id @default(uuid())
+  name              String @unique
+  width             Int
+  height            Int
+  thumbnailUrl      String?
+  mapDataUrl        String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  elements          MapElement[]
+  spaces             Space[]
+}
+
+model MapElement {
+  id            String @id @default(uuid())
+  mapId         String
+  elementId     String
+  x             Int
+  y             Int
+  width         Int?
+  height        Int?
+  map           Map @relation(fields: [mapId], references: [id])
+  element      Element @relation(fields: [elementId], references: [id])
+}
+
+model Element {
+  id            String @id @default(uuid())
+  name          String
+  imageUrl      String
+  properties    Json? // store extra info as JSON for animation/data
+  mapElements    MapElement[]
+}
+
+model Avatar {
+  id            String @id @default(uuid())
+  name          String?
+  imageUrl      String?
+  nftTokenId    String? // link to NFT token (if adding Web3)
+  users         User[]
+  participants  Participant[]
+}
+
+model Message {
+  id            String @id @default(uuid())
+  senderId      String
+  recipientId   String?
+  spaceId       String?
+  channelId     String?
+  body          String
+  type          String?
+  createdAt     DateTime @default(now())
+  sender        User @relation("SentMessage", fields: [senderId], references: [id])
+  space         Space? @relation(fields: [spaceId], references: [id])
+  channel       Channel? @relation(fields: [channelId], references: [id])
+  recipient     User? @relation("ReceivedMessage", fields: [recipientId], references: [id])
+
+  @@index([spaceId])
+  @@index([channelId])
+}
+
+model Channel {
+  id            String @id @default(uuid())
+  name          String
+  spaceId       String
+  space         Space @relation(fields: [spaceId], references: [id])
+  isPrivate     Boolean @default(false)
+  createdAt     DateTime @default(now())
+  messages      Message[]
+}
+
+model Notification {
+  id            String @id @default(uuid())
+  userId        String
+  user          User @relation(fields: [userId], references: [id])
+  content       String
+  type          String
+  read          Boolean @default(false)
+  createdAt     DateTime @default(now())
+}
+
+enum Role {
+  Admin
+  Moderator
+  User
+}
+
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+  GITHUB
 }
