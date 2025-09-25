@@ -25,7 +25,7 @@ model User {
   profileImageUrl     String?
   bannerImageUrl      String?
   bio                 String?
-  role                Role     @default(User)
+  role                Role     @default(USER)
   isProfileCompleted  Boolean  @default(false)
   isPremium           Boolean  @default(false)
   createdAt           DateTime @default(now())
@@ -45,7 +45,7 @@ model Participant {
   id    String @id @default(uuid())
   userId  String
   spaceId String
-  role    String?
+  role    ParticipantRole @default(MEMBER)
   joinedAt  DateTime @default(now())
   status    String?
   positionX  Int?
@@ -60,6 +60,7 @@ model Participant {
 
 model Space {
   id            String @id @default(uuid())
+  slug          String @unique
   name          String
   description   String?
   width         Int
@@ -69,6 +70,7 @@ model Space {
   map           Map   @relation(fields: [mapId], references: [id])
   mapId         String
   isPrivate     Boolean @default(false)
+  maxParticipants Int?
   createdAt     DateTime @default(now())
   updatedAt      DateTime @updatedAt
   participants  Participant[]      
@@ -128,6 +130,9 @@ model Message {
   channelId     String?
   body          String
   type          String?
+  attachments   Json?
+  editedAt      DateTime?
+  deletedAt     DateTime?
   createdAt     DateTime @default(now())
   sender        User @relation("SentMessage", fields: [senderId], references: [id])
   space         Space? @relation(fields: [spaceId], references: [id])
@@ -141,6 +146,7 @@ model Message {
 model Channel {
   id            String @id @default(uuid())
   name          String
+  order         Int?
   spaceId       String
   space         Space @relation(fields: [spaceId], references: [id])
   isPrivate     Boolean @default(false)
@@ -159,9 +165,16 @@ model Notification {
 }
 
 enum Role {
-  Admin
-  Moderator
-  User
+  ADMIN
+  MODERATOR
+  USER
+}
+
+enum ParticipantRole {
+  OWNER
+  MODERATOR
+  MEMBER
+  GUEST
 }
 
 enum AuthProvider {
