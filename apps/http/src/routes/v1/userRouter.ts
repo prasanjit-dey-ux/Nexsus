@@ -10,7 +10,7 @@ userRouter.put("/me", (req, res) => {
     console.log("Update user profile");
 })
 
-userRouter.put("me/password", (req, res) => {
+userRouter.put("/me/password", (req, res) => {
     console.log("Change password");
 });
 
