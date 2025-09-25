@@ -11,7 +11,7 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/api/v1', (req: Request, res: Response) => {
     res.send("HTTP Server is running!");
 });
 
