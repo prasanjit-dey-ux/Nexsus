@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authRouther } from "./authRouter";
+import { authRouter } from "./authRouter";
 import { userRouter } from "./userRouter";
 import { adminRouter } from "./adminRouter";
 import { avatarRouter } from "./avatarRouter";
@@ -13,16 +13,16 @@ import { spaceRouter } from "./spaceRouter";
 
 export const router = Router();
 
-router.use("/auth", authRouther);
-router.use("/user", userRouter);
-router.use("/space", spaceRouter);
-router.use("/map", mapRouter);
+router.use("/auth", authRouter);
+router.use("/users", userRouter);
+router.use("/spaces", spaceRouter);
+router.use("/maps", mapRouter);
 
 
-router.use("/utility", utilityRouter);
-router.use("/notification", notificationRouter);
+router.use("/utilities", utilityRouter);
+router.use("/notifications", notificationRouter);
 
-router.use("/avatar", avatarRouter);
-router.use("/element", elementRouter);
+router.use("/avatars", avatarRouter);
+router.use("/elements", elementRouter);
 router.use("/admin", adminRouter);
-router.use("/message", messageRouter);
+router.use("/messages", messageRouter);
