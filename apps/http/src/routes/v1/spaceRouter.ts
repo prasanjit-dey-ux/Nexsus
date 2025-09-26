@@ -23,7 +23,7 @@ spaceRouter.delete("/:id", (req, res) => {
     console.log("Delete the space")
 });
 
-// join and leave space
+// join/leave space
 
 spaceRouter.post("/:id/join", (req, res) => {
     console.log("Join space");
@@ -48,8 +48,47 @@ spaceRouter.delete("/:id/participants/:userId", (req, res) => {
     console.log("Kick out from the space")
 });
 
+spaceRouter.patch("/:id/participants/:userId/state", (req, res) => {
+    console.log("for avatar, x,y, mute/unmute. Needed for minimap and live presence")
+})
 
+// Channel
 
+spaceRouter.post("/:id/channels", (req, res) => {
+    console.log("create a channel");
+});
 
+spaceRouter.get("/:id/channels", (req, res) => {
+    console.log("get all the channel");
+});
 
+spaceRouter.get("/:id/channels/:channelId", (req, res) => {
+    console.log("get the channel info")
+});
 
+spaceRouter.put("/:id/channels/:channelId", (req, res) => {
+    console.log("Update the channel");
+});
+
+spaceRouter.delete("/:id/channels/:channelId", (req, res) => {
+    console.log("Delete the channel");
+});
+
+// Message
+spaceRouter.get("/:id/channels/:channelId/messages", (req, res) => {
+    console.log("List message in the channel");
+});
+
+spaceRouter.post("/:id/channels/:channelId/messages", (req, res) => {
+    console.log("Send the message in channel")
+});
+
+// Global chat
+
+spaceRouter.post("/:id/messages", (req, res) => {
+    console.log("Send global message");
+});
+
+spaceRouter.get("/:id/messages", (req, res) => {
+    console.log("Recieved globat message")
+}) 
