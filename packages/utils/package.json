@@ -1,0 +1,14 @@
+{
+  "name": "@metaverse/utils",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.15.3"
+  }
+}
+
