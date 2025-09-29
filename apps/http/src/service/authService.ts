@@ -42,4 +42,7 @@ export const googleAuthService = async (idToken: string): Promise<void> => {
         }
     }
 
+    // 4. Update last login timestamp
+    await client.user.update({ where: {id: user.id}, data: {lastLoginAt: new Date() } });
+
 }
