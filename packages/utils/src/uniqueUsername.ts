@@ -1,5 +1,5 @@
 export async function generateUniqueUsername(desired: string,client:any) {
-    let finalUsername = desired.replace(/^a-zA-Z0-9_]/g,"");
+    let finalUsername = desired.replace(/[^a-zA-Z0-9_]/g, "");
     let attempt = 0;
 
     while (await client.user.findUnique({ where: { username: finalUsername } })) {
