@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { googleAuthService } from "../service/authService";
+import { googleAuthService, githubAuthService } from "../service/authService";
+
 
 export const googleAuth = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -10,8 +11,23 @@ export const googleAuth = async (req: Request, res: Response): Promise<void> => 
         };
         const result = await googleAuthService(idToken);
         res.json(result);
-    } catch (error: any) {
+    } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "OAuth failed"
         res.status(500).json({ error: errorMessage});
+    }
+}
+
+export const githubAuth = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { code } = req.body;
+        if(!code){
+            res.status(400).json({error: "Missing code"});
+            return
+        }
+        const result = await githubAuthService(code);
+        res.json(result);
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : "OAuth failed"
+        res.status(500).json({ error: errorMessage})
     }
 }
