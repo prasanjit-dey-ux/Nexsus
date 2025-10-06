@@ -1,4 +1,3 @@
-
 import { OAuth2Client } from "google-auth-library";
 import axios from "axios";
 import client from "@metaverse/db";
@@ -190,6 +189,6 @@ export const githubAuthService = async (code: string) => {
         throw new Error(`GitHub API error: ${errorMsg}`);
   } else {
         throw new Error(error.message || "GitHub OAuth failed");
-  }
+    }
 }
 };
